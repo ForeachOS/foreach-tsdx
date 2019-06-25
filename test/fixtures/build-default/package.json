@@ -1,6 +1,6 @@
 {
   "scripts": {
-    "build": "tsdx build"
+    "build": "foreach-tsdx build"
   },
   "name": "build-default",
   "license": "MIT"

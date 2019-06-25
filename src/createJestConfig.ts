@@ -8,6 +8,7 @@ export function createJestConfig(
   const config = {
     transform: {
       '.(ts|tsx)': require.resolve('ts-jest/dist'),
+      '^.+\\.css$': require.resolve('./jest/cssTransform.js'),
     },
     transformIgnorePatterns: ['[/\\\\]node_modules[/\\\\].+\\.(js|jsx)$'],
     moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],

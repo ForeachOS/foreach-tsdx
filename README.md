@@ -1,8 +1,6 @@
 ![tsdx](https://user-images.githubusercontent.com/4060187/56918426-fc747600-6a8b-11e9-806d-2da0b49e89e4.png)
 
-[![Blazing Fast](https://badgen.now.sh/badge/speed/blazing%20%F0%9F%94%A5/green)](https://npm.im/tsdx) [![Blazing Fast](https://badgen.now.sh/badge/speed/blazing%20%F0%9F%94%A5/green)](https://npm.im/tsdx) [![Blazing Fast](https://badgen.now.sh/badge/speed/blazing%20%F0%9F%94%A5/green)](https://npm.im/tsdx) [![CircleCI](https://circleci.com/gh/palmerhq/tsdx.svg?style=svg)](https://circleci.com/gh/palmerhq/tsdx)
-
-Despite all the recent hype, setting up a new TypeScript (x React) library can be tough. Between [Rollup](https://github.com/rollup/rollup), [Jest](https://github.com/facebook/jest), `tsconfig`, [Yarn resolutions](https://yarnpkg.com/en/docs/selective-version-resolutions), TSLint, and getting VSCode to play nicely....there is just a whole lot of stuff to do (and things to screw up). TSDX is a zero-config CLI that helps you develop, test, and publish modern TypeScript packages with ease--so you can focus on your awesome new library and not waste another afternoon on the configuration.
+Despite all the recent hype, setting up a new TypeScript (x React) library can be tough. Between [Rollup](https://github.com/rollup/rollup), [Jest](https://github.com/facebook/jest), `tsconfig`, [Yarn resolutions](https://yarnpkg.com/en/docs/selective-version-resolutions), TSLint, and getting VSCode to play nicely....there is just a whole lot of stuff to do (and things to screw up). foreach-tsdx is a zero-config CLI that helps you develop, test, and publish modern TypeScript packages with ease--so you can focus on your awesome new library and not waste another afternoon on the configuration.
 
 <!-- START doctoc generated TOC please keep comment here to allow auto update -->
 <!-- DON'T EDIT THIS SECTION, INSTEAD RE-RUN doctoc TO UPDATE -->
@@ -18,9 +16,9 @@ Despite all the recent hype, setting up a new TypeScript (x React) library can b
 - [Inspiration](#inspiration)
   - [Comparison to Microbundle](#comparison-to-microbundle)
 - [API Reference](#api-reference)
-  - [`tsdx watch`](#tsdx-watch)
-  - [`tsdx build`](#tsdx-build)
-  - [`tsdx test`](#tsdx-test)
+  - [`foreach-tsdx watch`](#foreach-tsdx-watch)
+  - [`foreach-tsdx build`](#foreach-tsdx-build)
+  - [`foreach-tsdx test`](#foreach-tsdx-test)
 - [Author](#author)
 - [License](#license)
 
@@ -36,13 +34,13 @@ TSDX comes with the "battery-pack included" and is part of a complete TypeScript
 - Works with React
 - Human readable error messages (and in VSCode-friendly format)
 - Bundle size snapshots
-- Jest test runner setup with sensible defaults via `tsdx test`
+- Jest test runner setup with sensible defaults via `foreach-tsdx test`
 - Zero-config, single dependency
 
 ## Quick Start
 
 ```
-npx tsdx create mylib
+npx foreach-tsdx create mylib
 cd mylib
 yarn start
 ```
@@ -97,7 +95,7 @@ export const sum = (a: number, b: number) => {
 };
 ```
 
-`tsdx build` will output an ES module file and 3 CommonJS files (dev, prod, and an entry file). If you want to specify a UMD build, you can do that as well. For brevity, let's examine the CommonJS output (comments added for emphasis):
+`foreach-tsdx build` will output an ES module file and 3 CommonJS files (dev, prod, and an entry file). If you want to specify a UMD build, you can do that as well. For brevity, let's examine the CommonJS output (comments added for emphasis):
 
 ```js
 // Entry File
@@ -268,53 +266,61 @@ TSDX is ripped out of [Formik's](https://github.com/jaredpalmer/formik) build to
 
 ## API Reference
 
-### `tsdx watch`
+### `foreach-tsdx watch`
 
 ```shell
 Description
   Rebuilds on any change
 
 Usage
-  $ tsdx watch [options]
+  $ foreach-tsdx watch [options]
 
 Options
   -i, --entry    Entry module(s)
   --target       Specify your target environment  (default web)
   --name         Specify name exposed in UMD builds
   --format       Specify module format(s)  (default cjs,esm)
+  --include-deps Include all project dependencies in the bundle (default false)
+  --inline-css   Inlines the css in the JS bundle (default false)
   -h, --help     Displays this message
 
 Examples
-  $ tsdx watch --entry src/foo.tsx
-  $ tsdx watch --target node
-  $ tsdx watch --name Foo
-  $ tsdx watch --format cjs,esm,umd
+  $ foreach-tsdx watch --entry src/foo.tsx
+  $ foreach-tsdx watch --target node
+  $ foreach-tsdx watch --name Foo
+  $ foreach-tsdx watch --format cjs,esm,umd
+  $ foreach-tsdx watch --include-deps
+  $ foreach-tsdx watch --inline-css
 ```
 
-### `tsdx build`
+### `foreach-tsdx build`
 
 ```shell
 Description
   Build your project once and exit
 
 Usage
-  $ tsdx build [options]
+  $ foreach-tsdx build [options]
 
 Options
   -i, --entry    Entry module(s)
   --target       Specify your target environment  (default web)
   --name         Specify name exposed in UMD builds
   --format       Specify module format(s)  (default cjs,esm)
+  --include-deps Include all project dependencies in the bundle (default false)
+  --inline-css   Inlines the css in the JS bundle (default false)
   -h, --help     Displays this message
 
 Examples
-  $ tsdx build --entry src/foo.tsx
-  $ tsdx build --target node
-  $ tsdx build --name Foo
-  $ tsdx build --format cjs,esm,umd
+  $ foreach-tsdx build --entry src/foo.tsx
+  $ foreach-tsdx build --target node
+  $ foreach-tsdx build --name Foo
+  $ foreach-tsdx build --format cjs,esm,umd
+  $ foreach-tsdx build --include-deps
+  $ foreach-tsdx build --inline-css
 ```
 
-### `tsdx test`
+### `foreach-tsdx test`
 
 This runs Jest v24.x in watch mode. See [https://jestjs.io](https://jestjs.io) for options. If you are using the React template, jest uses the flag `--env=jsdom` by default.
 

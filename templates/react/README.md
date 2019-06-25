@@ -84,7 +84,7 @@ _to be completed_
 
 ## Optimizations
 
-Please see the main `tsdx` [optimizations docs](https://github.com/palmerhq/tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
+Please see the main `foreach-tsdx` [optimizations docs](https://github.com/jarrku/foreach-tsdx#optimizations). In particular, know that you can take advantage of development-only optimizations:
 
 ```js
 // ./types/index.d.ts
@@ -96,7 +96,7 @@ if (__DEV__) {
 }
 ```
 
-You can also choose to install and use [invariant](https://github.com/palmerhq/tsdx#invariant) and [warning](https://github.com/palmerhq/tsdx#warning) functions.
+You can also choose to install and use [invariant](https://github.com/jarrku/foreach-tsdx#invariant) and [warning](https://github.com/jarrku/foreach-tsdx#warning) functions.
 
 ## Module Formats
 
@@ -116,9 +116,11 @@ The default example imports and live reloads whatever is in `/dist`, so if you a
 
 ## Named Exports
 
-Per Palmer Group guidelines, [always use named exports.](https://github.com/palmerhq/typescript#exports) Code split inside your React app instead of your React library.
+Per Palmer Group guidelines, [always use named exports.](https://github.com/jarrku/foreach-tsdx#exports) Code split inside your React app instead of your React library.
 
 ## Including Styles
+
+`css` and `sass` files will be resolved and inlined into your bundle.
 
 There are many ways to ship styles, including with CSS-in-JS. TSDX has no opinion on this, configure how you like.
 

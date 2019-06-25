@@ -38,7 +38,7 @@ const logger = createLogger({
   storagePath: path.join(__dirname, '.progress-estimator'),
 });
 
-const prog = sade('tsdx');
+const prog = sade('foreach-tsdx');
 
 let appPackageJson: {
   name: string;
@@ -122,13 +122,13 @@ prog
   .action(async (pkg: string) => {
     console.log(
       chalk.blue(`
-::::::::::: ::::::::  :::::::::  :::    ::: 
-    :+:    :+:    :+: :+:    :+: :+:    :+: 
-    +:+    +:+        +:+    +:+  +:+  +:+  
-    +#+    +#++:++#++ +#+    +:+   +#++:+   
-    +#+           +#+ +#+    +#+  +#+  +#+  
-    #+#    #+#    #+# #+#    #+# #+#    #+# 
-    ###     ########  #########  ###    ###                                                 
+::::::::::: ::::::::  :::::::::  :::    :::
+    :+:    :+:    :+: :+:    :+: :+:    :+:
+    +:+    +:+        +:+    +:+  +:+  +:+
+    +#+    +#++:++#++ +#+    +:+   +#++:+
+    +#+           +#+ +#+    +#+  +#+  +#+
+    #+#    #+#    #+# #+#    #+# #+#    #+#
+    ###     ########  #########  ###    ###
 `)
     );
     const bootSpinner = ora(`Creating ${chalk.bold.green(pkg)}...`);
@@ -191,9 +191,12 @@ prog
         typings: 'dist/index.d.ts',
         files: ['dist'],
         scripts: {
-          start: 'tsdx watch',
-          build: 'tsdx build',
-          test: template === 'react' ? 'tsdx test --env=jsdom' : 'tsdx test',
+          start: 'foreach-tsdx watch',
+          build: 'foreach-tsdx build',
+          test:
+            template === 'react'
+              ? 'foreach-tsdx test --env=jsdom'
+              : 'foreach-tsdx test',
         },
         peerDependencies: template === 'react' ? { react: '>=16' } : {},
         husky: {
@@ -219,10 +222,10 @@ prog
 
     let deps = [
       '@types/jest',
+      '@jarrku/foreach-tsdx',
       'husky',
       'pretty-quick',
       'prettier',
-      'tsdx',
       'tslib',
       'typescript',
     ].sort();
@@ -260,9 +263,13 @@ prog
   .option('--name', 'Specify name exposed in UMD builds')
   .example('watch --name Foo')
   .option('--format', 'Specify module format(s)', 'cjs,esm')
-  .example('watch --format cjs,esm')
+  .example('watch --format cjs,esm,umd')
   .option('--tsconfig', 'Specify custom tsconfig path')
-  .example('build --tsconfig ./tsconfig.foo.json')
+  .example('watch --tsconfig ./tsconfig.foo.json')
+  .option('--include-deps', 'Include all project dependencies in the bundle')
+  .example('watch --include-deps')
+  .option('--inline-css', 'Inlines the css in the JS bundle')
+  .example('watch --inline-css')
   .action(async (dirtyOpts: any) => {
     const opts = await normalizeOpts(dirtyOpts);
     const buildConfigs = createBuildConfigs(opts);
@@ -315,9 +322,13 @@ prog
   .option('--name', 'Specify name exposed in UMD builds')
   .example('build --name Foo')
   .option('--format', 'Specify module format(s)', 'cjs,esm')
-  .example('build --format cjs,esm')
+  .example('build --format cjs,esm,umd')
   .option('--tsconfig', 'Specify custom tsconfig path')
   .example('build --tsconfig ./tsconfig.foo.json')
+  .option('--include-deps', 'Include all project dependencies in the bundle')
+  .example('build --include-deps')
+  .option('--inline-css', 'Inlines the css in the JS bundle')
+  .example('build --inline-css')
   .action(async (dirtyOpts: any) => {
     const opts = await normalizeOpts(dirtyOpts);
     const buildConfigs = createBuildConfigs(opts);

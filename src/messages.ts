@@ -4,14 +4,14 @@ import * as Output from './output';
 
 // This was copied from Razzle. Lots of unused stuff.
 const program = {
-  name: 'tsdx',
+  name: 'foreach-tsdx',
 };
 
 export const help = function() {
   return `
     Only ${chalk.green('<project-directory>')} is required.
     If you have any problems, do not hesitate to file an issue:
-      ${chalk.cyan('https://github.com/jaredpalmer/tsdx/issues/new')}
+      ${chalk.cyan('https://github.com/jarrku/foreach-tsdx/issues/new')}
   `;
 };
 
@@ -72,20 +72,20 @@ export const start = function(projectName: string) {
 
   return `
   ${chalk.green('Awesome!')} You're now ready to start coding.
-  
+
   I already ran ${Output.cmd(commands.install)} for you, so your next steps are:
     ${Output.cmd(`cd ${projectName}`)}
-  
+
   To start developing (rebuilds on changes):
     ${Output.cmd(commands.start)}
-  
+
   To build for production:
     ${Output.cmd(commands.build)}
 
   To test your library with Jest:
     ${Output.cmd(commands.test)}
-    
+
   Questions? Feedback? Please let me know!
-  ${chalk.green('https://github.com/jaredpalmer/tsdx/issues')}
+  ${chalk.green('https://github.com/jarrku/foreach-tsdx/issues')}
 `;
 };

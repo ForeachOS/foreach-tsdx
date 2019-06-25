@@ -10,7 +10,7 @@ shell.config.silent = false;
 
 const stageName = 'stage-build';
 
-describe('tsdx build', () => {
+describe('foreach-tsdx build', () => {
   beforeAll(() => {
     util.teardownStage(stageName);
   });

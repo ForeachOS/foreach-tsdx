@@ -9,6 +9,8 @@ import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import sourceMaps from 'rollup-plugin-sourcemaps';
 import typescript from 'rollup-plugin-typescript2';
+//@ts-ignore
+import postcss from 'rollup-plugin-postcss';
 import shebangPlugin from '@jaredpalmer/rollup-plugin-preserve-shebang';
 
 const replacements = [{ original: 'lodash', replacement: 'lodash-es' }];
@@ -59,6 +61,8 @@ export function createRollupConfig(
     input: string;
     name: string;
     target: 'node' | 'browser';
+    'include-deps'?: boolean;
+    'inline-css'?: boolean;
     tsconfig?: string;
   }
 ) {
@@ -80,6 +84,7 @@ export function createRollupConfig(
     input: opts.input,
     // Tell Rollup which packages to ignore
     external: (id: string) => {
+      if (opts['include-deps']) return false;
       if (id === 'babel-plugin-transform-async-to-promises/helpers') {
         return false;
       }
@@ -172,10 +177,17 @@ export function createRollupConfig(
           },
         },
       }),
+      postcss({
+        extract: opts['inline-css'] !== true,
+        minimize: shouldMinify,
+      }),
       babel(babelOptions(format, opts.target)),
       opts.env !== undefined &&
         replace({
           'process.env.NODE_ENV': JSON.stringify(opts.env),
+          'process.env.REACT_APP_ENV': JSON.stringify(
+            process.env.REACT_APP_ENV
+          ),
         }),
       sourceMaps(),
       // sizeSnapshot({
