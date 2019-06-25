@@ -28,7 +28,7 @@
     "prepare": "tsc -p tsconfig.json",
     "build": "tsc -p tsconfig.json",
     "test": "jest --config ./test/jest.config.json",
-    "release": "np --any-branch"
+    "release": "np --no-publish --any-branch && npm publish "
   },
   "files": [
     "dist",
