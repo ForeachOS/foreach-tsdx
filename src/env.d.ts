@@ -17,4 +17,6 @@ declare module '@jaredpalmer/rollup-plugin-preserve-shebang';
 declare module 'rollup-plugin-babel';
 declare module 'rollup-plugin-size-snapshot';
 declare module 'rollup-plugin-terser';
+declare module 'rollup-plugin-postcss';
+declare module 'postcss-normalize';
 declare module 'camelcase';

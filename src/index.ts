@@ -201,8 +201,15 @@ prog
         peerDependencies: template === 'react' ? { react: '>=16' } : {},
         husky: {
           hooks: {
-            'pre-commit': 'pretty-quick --staged',
+            'pre-commit': 'lint-staged',
           },
+        },
+        eslintConfig: {
+          extends: '@foreach/eslint-config-react-app',
+        },
+        'lint-staged': {
+          '*.{ts,tsx,js,jsx}': ['prettier --write', 'eslint --fix', 'git add'],
+          '*.{json,md,css,scss}': ['prettier --write', 'git add'],
         },
         prettier: {
           printWidth: 80,
@@ -222,10 +229,12 @@ prog
 
     let deps = [
       '@types/jest',
-      '@jarrku/foreach-tsdx',
+      '@foreach/tsdx',
+      '@foreach/eslint-config-react-app',
       'husky',
-      'pretty-quick',
+      'lint-staged',
       'prettier',
+      'eslint',
       'tslib',
       'typescript',
     ].sort();
@@ -237,6 +246,8 @@ prog
         '@types/react-dom',
         'react',
         'react-dom',
+        'jest-dom',
+        '@testing-library/react',
       ].sort();
     }
 

@@ -9,8 +9,9 @@ import replace from 'rollup-plugin-replace';
 import resolve from 'rollup-plugin-node-resolve';
 import sourceMaps from 'rollup-plugin-sourcemaps';
 import typescript from 'rollup-plugin-typescript2';
-//@ts-ignore
 import postcss from 'rollup-plugin-postcss';
+import postcssNormalize from 'postcss-normalize';
+
 import shebangPlugin from '@jaredpalmer/rollup-plugin-preserve-shebang';
 
 const replacements = [{ original: 'lodash', replacement: 'lodash-es' }];
@@ -180,6 +181,16 @@ export function createRollupConfig(
       postcss({
         extract: opts['inline-css'] !== true,
         minimize: shouldMinify,
+        plugins: [
+          require('postcss-flexbugs-fixes'),
+          require('postcss-preset-env')({
+            autoprefixer: {
+              flexbox: 'no-2009',
+            },
+            stage: 3,
+          }),
+          postcssNormalize(),
+        ],
       }),
       babel(babelOptions(format, opts.target)),
       opts.env !== undefined &&
