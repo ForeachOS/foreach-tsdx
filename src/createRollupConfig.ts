@@ -180,7 +180,7 @@ export function createRollupConfig(
       }),
       postcss({
         extract: opts['inline-css'] !== true,
-        minimize: shouldMinify,
+        minimize: shouldMinify || format === 'esm',
         plugins: [
           require('postcss-flexbugs-fixes'),
           require('postcss-preset-env')({
