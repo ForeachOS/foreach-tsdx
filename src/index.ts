@@ -119,7 +119,10 @@ prog
   .version(pkg.version)
   .command('create <pkg>')
   .describe('Create a new package with TSDX')
-  .action(async (pkg: string) => {
+  .example('create mypackage')
+  .option('--template', 'Specify a template. Allowed choices: [basic, react]')
+  .example('create --template react mypackage')
+  .action(async (pkg: string, opts: any) => {
     console.log(
       chalk.blue(`
 ::::::::::: ::::::::  :::::::::  :::    :::
@@ -165,7 +168,16 @@ prog
         choices: ['basic', 'react'],
       });
 
-      template = await prompt.run();
+      if (opts.template) {
+        template = opts.template.trim();
+        if (!prompt.choices.includes(template)) {
+          bootSpinner.fail(`Invalid template ${chalk.bold.red(template)}`);
+          template = await prompt.run();
+        }
+      } else {
+        template = await prompt.run();
+      }
+
       bootSpinner.start();
       // copy the template
       await fs.copy(
@@ -277,6 +289,13 @@ prog
   .example('watch --format cjs,esm,umd')
   .option('--tsconfig', 'Specify custom tsconfig path')
   .example('watch --tsconfig ./tsconfig.foo.json')
+  .option(
+    '--extractErrors',
+    'Extract errors to codes.json and provide a url for decoding.'
+  )
+  .example(
+    'build --extractErrors=https://reactjs.org/docs/error-decoder.html?invariant='
+  )
   .option('--include-deps', 'Include all project dependencies in the bundle')
   .example('watch --include-deps')
   .option('--inline-css', 'Inlines the css in the JS bundle')
@@ -300,7 +319,9 @@ prog
       }))
     ).on('event', async event => {
       if (event.code === 'START') {
-        clearConsole();
+        if (!opts.verbose) {
+          clearConsole();
+        }
         spinner.start(chalk.bold.cyan('Compiling modules...'));
       }
       if (event.code === 'ERROR') {
@@ -336,6 +357,13 @@ prog
   .example('build --format cjs,esm,umd')
   .option('--tsconfig', 'Specify custom tsconfig path')
   .example('build --tsconfig ./tsconfig.foo.json')
+  .option(
+    '--extractErrors',
+    'Extract errors to codes.json and provide a url for decoding.'
+  )
+  .example(
+    'build --extractErrors=https://reactjs.org/docs/error-decoder.html?invariant='
+  )
   .option('--include-deps', 'Include all project dependencies in the bundle')
   .example('build --include-deps')
   .option('--inline-css', 'Inlines the css in the JS bundle')
@@ -362,8 +390,10 @@ prog
           throw e;
         });
       logger(promise, 'Building modules');
+      await promise;
     } catch (error) {
       logError(error);
+      process.exit(1);
     }
   });
 

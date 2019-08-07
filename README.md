@@ -15,7 +15,13 @@ Fix jest with css imports (switch out ts-jest).
   - [`npm test` or `yarn test`](#npm-test-or-yarn-test)
 - [Optimizations](#optimizations)
   - [Development-only Expressions + Treeshaking](#development-only-expressions--treeshaking)
+    - [Rollup Treeshaking](#rollup-treeshaking)
+    - [Advanced `babel-plugin-dev-expressions`](#advanced-babel-plugin-dev-expressions)
+      - [`__DEV__`](#__dev__)
+      - [`invariant`](#invariant)
+      - [`warning`](#warning)
   - [Using lodash](#using-lodash)
+- [Hosting extracted errors](#hosting-extracted-errors)
 - [Inspiration](#inspiration)
   - [Comparison to Microbundle](#comparison-to-microbundle)
 - [API Reference](#api-reference)
@@ -197,7 +203,9 @@ if (!condition) {
 }
 ```
 
-Recommended for use with smaller https://github.com/alexreardon/tiny-invariant.
+Note: TSDX doesn't supply an `invariant` function for you, you need to import one yourself. We recommend https://github.com/alexreardon/tiny-invariant.
+
+To extract and minify error codes in production into a static `codes.json` file, pass an `extractErrors` flag with a URL where you will decode the error code. Example: `tsdx build --extractErrors=https://your-url.com/?invariant=`
 
 ##### `warning`
 
@@ -215,7 +223,7 @@ if ('production' !== process.env.NODE_ENV) {
 }
 ```
 
-Recommended for use with https://github.com/alexreardon/tiny-warning.
+Note: TSDX doesn't supply a `warning` function for you, you need to import one yourself. We recommend https://github.com/alexreardon/tiny-warning.
 
 ### Using lodash
 
@@ -256,6 +264,16 @@ TSDX will rewrite your `import kebabCase from 'lodash/kebabCase'` to `import o f
 
 > Note: TSDX will also transform destructured imports. For example, `import { kebabCase } from 'lodash'` would have also been transformed to `import o from "lodash-es/kebabCase".
 
+### Error extraction
+
+_This feature is still under development_
+
+After running `--extractErrors`, you will have a `./errors/codes.json` file with all your extracted error codes. This process scans your production code and swaps out your error message strings for a corresponding error code (just like React!). This extraction only works if your error checking/warning is done by a function called `invariant`. Note: you can use either `tiny-invariant` or `tiny-warning`, but you must then import the module as a variable called `invariant` and it should have the same type signature.
+
+After that, you will need to host the decoder somewhere (with the URL that you passed in to `--extractErrors`).
+
+_Simple guide to host error codes to be completed_
+
 ## Inspiration
 
 TSDX is ripped out of [Formik's](https://github.com/jaredpalmer/formik) build tooling. TSDX is very similar to [@developit/microbundle](https://github.com/developit/microbundle), but that is because Formik's Rollup configuration and Microbundle's internals have converged around similar plugins over the last year or so.
@@ -283,6 +301,8 @@ Options
   --target       Specify your target environment  (default web)
   --name         Specify name exposed in UMD builds
   --format       Specify module format(s)  (default cjs,esm)
+  --tsconfig            Specify your custom tsconfig path (default <root-folder>/tsconfig.json)
+  --verbose             Keep outdated console output in watch mode instead of clearing the screen
   --include-deps Include all project dependencies in the bundle (default false)
   --inline-css   Inlines the css in the JS bundle (default false)
   -h, --help     Displays this message
@@ -292,6 +312,7 @@ Examples
   $ foreach-tsdx watch --target node
   $ foreach-tsdx watch --name Foo
   $ foreach-tsdx watch --format cjs,esm,umd
+  $ foreach-tsdx watch --tsconfig ./tsconfig.foo.json
   $ foreach-tsdx watch --include-deps
   $ foreach-tsdx watch --inline-css
 ```
@@ -310,6 +331,8 @@ Options
   --target       Specify your target environment  (default web)
   --name         Specify name exposed in UMD builds
   --format       Specify module format(s)  (default cjs,esm)
+  --extractErrors       Specify url for extracting error codes
+  --tsconfig            Specify your custom tsconfig path (default <root-folder>/tsconfig.json)
   --include-deps Include all project dependencies in the bundle (default false)
   --inline-css   Inlines the css in the JS bundle (default false)
   -h, --help     Displays this message
@@ -319,6 +342,8 @@ Examples
   $ foreach-tsdx build --target node
   $ foreach-tsdx build --name Foo
   $ foreach-tsdx build --format cjs,esm,umd
+  $ foreach-tsdx build --extractErrors=https://reactjs.org/docs/error-decoder.html?invariant=
+  $ foreach-tsdx build --tsconfig ./tsconfig.foo.json
   $ foreach-tsdx build --include-deps
   $ foreach-tsdx build --inline-css
 ```

@@ -20,3 +20,6 @@ declare module 'rollup-plugin-terser';
 declare module 'rollup-plugin-postcss';
 declare module 'postcss-normalize';
 declare module 'camelcase';
+declare module 'babel-traverse';
+declare module 'babylon';
+declare module '@babel/helper-module-imports';
