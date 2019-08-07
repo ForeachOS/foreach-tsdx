@@ -241,7 +241,7 @@ prog
 
     let deps = [
       '@types/jest',
-      '@foreach/tsdx',
+      'foreach-tsdx',
       '@foreach/eslint-config-react-app',
       'husky',
       'lint-staged',
@@ -287,6 +287,11 @@ prog
   .example('watch --name Foo')
   .option('--format', 'Specify module format(s)', 'cjs,esm')
   .example('watch --format cjs,esm,umd')
+  .option(
+    '--verbose',
+    'Keep outdated console output in watch mode instead of clearing the screen'
+  )
+  .example('watch --verbose')
   .option('--tsconfig', 'Specify custom tsconfig path')
   .example('watch --tsconfig ./tsconfig.foo.json')
   .option(
