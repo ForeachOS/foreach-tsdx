@@ -147,7 +147,11 @@ export function createRollupConfig(
       },
       name: opts.name || safeVariableName(opts.name),
       sourcemap: true,
-      globals: { react: 'React', 'react-native': 'ReactNative' },
+      globals: {
+        react: 'React',
+        'react-native': 'ReactNative',
+        jquery: 'jQuery',
+      },
       exports: 'named',
     },
     plugins: [
