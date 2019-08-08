@@ -319,14 +319,13 @@ prog
     const buildConfigs = createBuildConfigs(opts);
     await ensureDistFolder();
     const cli = new CLIEngine({
+      extensions: ['.ts', '.tsx'],
       baseConfig: {
         extends: [require.resolve('@foreach/eslint-config-react-app')],
       },
     });
 
-    const formatter = cli.getFormatter(
-      require.resolve('react-dev-utils/eslintFormatter')
-    );
+    const formatter = cli.getFormatter();
 
     if (opts.format.includes('cjs')) {
       await writeCjsEntryFile(opts.name);
@@ -359,7 +358,7 @@ prog
       }
       if (event.code === 'END') {
         spinner.succeed(chalk.bold.green('Compiled successfully'));
-        const report = cli.executeOnFiles(opts['_']);
+        const report = cli.executeOnFiles([paths.appSrc]);
         console.log(formatter(report.results));
         console.log(`
   ${chalk.dim('Watching for changes')}
