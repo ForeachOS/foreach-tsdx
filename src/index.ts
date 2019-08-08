@@ -281,8 +281,14 @@ prog
   .describe('Rebuilds on any change')
   .option('--entry, -i', 'Entry module(s)')
   .example('watch --entry src/foo.tsx')
-  .option('--external, -e', 'External modules')
-  .example('watch --external jquery -e react')
+  .option('--externals, -e', 'External modules')
+  .example('watch --externals jquery,react')
+  .option(
+    '--globals, -g',
+    'Global modules',
+    'react=React,jquery=jQuery,react-native=ReactNative'
+  )
+  .example('watch -g jquery=jQuery,react=React')
   .option('--target', 'Specify your target environment', 'web')
   .example('watch --target node')
   .option('--name', 'Specify name exposed in UMD builds')
@@ -356,8 +362,14 @@ prog
   .describe('Build your project once and exit')
   .option('--entry, -i', 'Entry module(s)')
   .example('build --entry src/foo.tsx')
-  .option('--external, -e', 'External modules')
-  .example('build --external jquery -e react')
+  .option('--externals, -e', 'External modules')
+  .example('build --externals jquery,react')
+  .option(
+    '--globals, -g',
+    'Global modules',
+    'react=React,jquery=jQuery,react-native=ReactNative'
+  )
+  .example('build -g jquery=jQuery,react=React')
   .option('--target', 'Specify your target environment', 'web')
   .example('build --target node')
   .option('--name', 'Specify name exposed in UMD builds')
@@ -406,15 +418,21 @@ prog
     }
   });
 
+type Dict = {
+  [x: string]: string;
+};
+
 async function normalizeOpts(opts: any) {
   return {
     ...opts,
     name: opts.name || appPackageJson.name,
     input: await getInputs(opts.entry, appPackageJson.source),
-    externals: (Array.isArray(opts.external)
-      ? opts.external
-      : [opts.external]
-    ).filter(Boolean),
+    externals: opts.externals ? opts.externals.split(',') : [],
+    globals: (opts.globals as string).split(',').reduce<Dict>((obj, glob) => {
+      const [key, value] = glob.split('=');
+      obj[key] = value;
+      return obj;
+    }, {}),
     format: opts.format.split(',').map((format: string) => {
       if (format === 'es') {
         return 'esm';

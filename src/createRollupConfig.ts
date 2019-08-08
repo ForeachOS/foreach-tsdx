@@ -23,6 +23,9 @@ const errorCodeOpts = {
 interface TsdxOptions {
   entry: string[];
   externals: string[];
+  globals: {
+    [x: string]: string;
+  };
   input: string;
   name: string;
   target: 'node' | 'browser';
@@ -147,11 +150,7 @@ export function createRollupConfig(
       },
       name: opts.name || safeVariableName(opts.name),
       sourcemap: true,
-      globals: {
-        react: 'React',
-        'react-native': 'ReactNative',
-        jquery: 'jQuery',
-      },
+      globals: opts.globals,
       exports: 'named',
     },
     plugins: [
