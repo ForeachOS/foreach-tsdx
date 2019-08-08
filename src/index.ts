@@ -242,11 +242,9 @@ prog
     let deps = [
       '@types/jest',
       'foreach-tsdx',
-      '@foreach/eslint-config-react-app',
       'husky',
       'lint-staged',
       'prettier',
-      'eslint',
       'tslib',
       'typescript',
     ].sort();

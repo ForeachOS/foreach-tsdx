@@ -15,6 +15,7 @@ declare module '@babel/core' {
 // Rollup plugins
 declare module '@jaredpalmer/rollup-plugin-preserve-shebang';
 declare module 'rollup-plugin-babel';
+declare module 'rollup-plugin-eslint';
 declare module 'rollup-plugin-size-snapshot';
 declare module 'rollup-plugin-terser';
 declare module 'rollup-plugin-postcss';
