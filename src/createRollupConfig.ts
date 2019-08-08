@@ -72,7 +72,7 @@ const babelOptions = (format: 'cjs' | 'esm' | 'umd', opts: TsdxOptions) => ({
 let shebang: any = {};
 
 function getFileName(opts: TsdxOptions) {
-  const multipleEntries = opts.entry.length > 1;
+  const multipleEntries = opts.entry && opts.entry.length > 1;
 
   if (!multipleEntries) return safePackageName(opts.name);
 
