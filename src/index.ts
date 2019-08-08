@@ -30,6 +30,7 @@ import { concatAllArray } from 'jpjs';
 import getInstallCmd from './getInstallCmd';
 import getInstallArgs from './getInstallArgs';
 import { Input, Select } from 'enquirer';
+import { eslint } from 'rollup-plugin-eslint';
 const pkg = require('../package.json');
 const createLogger = require('progress-estimator');
 // All configuration keys are optional, but it's recommended to specify a storage location.
@@ -319,16 +320,30 @@ prog
       await writeCjsEntryFile(opts.name);
     }
     const spinner = ora().start();
-    await watch(
-      (buildConfigs as RollupWatchOptions[]).map(inputOptions => ({
+
+    const configs = (buildConfigs as RollupWatchOptions[]).map(
+      inputOptions => ({
         watch: {
           silent: true,
           include: ['src/**'],
           exclude: ['node_modules/**'],
         } as WatcherOptions,
         ...inputOptions,
-      }))
-    ).on('event', async event => {
+      })
+    );
+
+    configs[configs.length - 1].plugins = [
+      eslint({
+        formatter: require.resolve('react-dev-utils/eslintFormatter'),
+        baseConfig: {
+          extends: [require.resolve('@foreach/eslint-config-react-app')],
+        },
+      }),
+      // @ts-ignore
+      ...configs[configs.length - 1].plugins,
+    ];
+
+    await watch(configs).on('event', async event => {
       if (event.code === 'START') {
         if (!opts.verbose) {
           clearConsole();

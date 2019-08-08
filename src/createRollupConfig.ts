@@ -2,7 +2,6 @@ import { DEFAULT_EXTENSIONS } from '@babel/core';
 import { safeVariableName, safePackageName, external } from './utils';
 import { paths } from './constants';
 import { terser } from 'rollup-plugin-terser';
-import { eslint } from 'rollup-plugin-eslint';
 import babel from 'rollup-plugin-babel';
 import commonjs from 'rollup-plugin-commonjs';
 import json from 'rollup-plugin-json';
@@ -161,12 +160,6 @@ export function createRollupConfig(
           return source;
         },
       },
-      eslint({
-        formatter: require.resolve('react-dev-utils/eslintFormatter'),
-        baseConfig: {
-          extends: [require.resolve('@foreach/eslint-config-react-app')],
-        },
-      }),
       resolve({
         mainFields: [
           'module',
