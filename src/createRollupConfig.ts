@@ -21,6 +21,8 @@ const errorCodeOpts = {
 };
 
 interface TsdxOptions {
+  entry: string[];
+  externals: string[];
   input: string;
   name: string;
   target: 'node' | 'browser';
@@ -69,6 +71,16 @@ const babelOptions = (format: 'cjs' | 'esm' | 'umd', opts: TsdxOptions) => ({
 // shebang cache map thing because the transform only gets run once
 let shebang: any = {};
 
+function getFileName(opts: TsdxOptions) {
+  const multipleEntries = opts.entry.length > 1;
+
+  if (!multipleEntries) return safePackageName(opts.name);
+
+  const [fileNameWithExt] = opts.input.split('/').reverse();
+  const [fileName] = fileNameWithExt.split('.');
+  return safePackageName(fileName);
+}
+
 export function createRollupConfig(
   format: 'cjs' | 'umd' | 'esm',
   opts: TsdxOptions
@@ -82,7 +94,7 @@ export function createRollupConfig(
     opts.minify !== undefined ? opts.minify : opts.env === 'production';
 
   const outputName = [
-    `${paths.appDist}/${safePackageName(opts.name)}`,
+    `${paths.appDist}/${getFileName(opts)}`,
     format,
     opts.env,
     shouldMinify ? 'min' : '',
@@ -96,7 +108,7 @@ export function createRollupConfig(
     input: opts.input,
     // Tell Rollup which packages to ignore
     external: (id: string) => {
-      if (opts['include-deps']) return false;
+      if (opts['include-deps']) return opts.externals.includes(id);
       if (id === 'babel-plugin-transform-async-to-promises/helpers') {
         return false;
       }

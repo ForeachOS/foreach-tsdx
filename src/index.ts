@@ -281,6 +281,8 @@ prog
   .describe('Rebuilds on any change')
   .option('--entry, -i', 'Entry module(s)')
   .example('watch --entry src/foo.tsx')
+  .option('--external, -e', 'External modules')
+  .example('watch --external jquery -e react')
   .option('--target', 'Specify your target environment', 'web')
   .example('watch --target node')
   .option('--name', 'Specify name exposed in UMD builds')
@@ -354,6 +356,8 @@ prog
   .describe('Build your project once and exit')
   .option('--entry, -i', 'Entry module(s)')
   .example('build --entry src/foo.tsx')
+  .option('--external, -e', 'External modules')
+  .example('build --external jquery -e react')
   .option('--target', 'Specify your target environment', 'web')
   .example('build --target node')
   .option('--name', 'Specify name exposed in UMD builds')
@@ -407,6 +411,10 @@ async function normalizeOpts(opts: any) {
     ...opts,
     name: opts.name || appPackageJson.name,
     input: await getInputs(opts.entry, appPackageJson.source),
+    externals: (Array.isArray(opts.external)
+      ? opts.external
+      : [opts.external]
+    ).filter(Boolean),
     format: opts.format.split(',').map((format: string) => {
       if (format === 'es') {
         return 'esm';
