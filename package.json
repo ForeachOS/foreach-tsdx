@@ -42,6 +42,7 @@
     "@babel/preset-env": "^7.5.5",
     "@foreach/eslint-config-react-app": "^1.0.2",
     "@types/eslint": "^4.16.6",
+    "@types/react": "^16.8.25",
     "ansi-escapes": "^4.2.1",
     "asyncro": "^3.0.0",
     "babel-plugin-annotate-pure-calls": "^0.4.0",
