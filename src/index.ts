@@ -30,7 +30,9 @@ import { concatAllArray } from 'jpjs';
 import getInstallCmd from './getInstallCmd';
 import getInstallArgs from './getInstallArgs';
 import { Input, Select } from 'enquirer';
-import { eslint } from 'rollup-plugin-eslint';
+
+import { CLIEngine } from 'eslint';
+
 const pkg = require('../package.json');
 const createLogger = require('progress-estimator');
 // All configuration keys are optional, but it's recommended to specify a storage location.
@@ -316,34 +318,31 @@ prog
     const opts = await normalizeOpts(dirtyOpts);
     const buildConfigs = createBuildConfigs(opts);
     await ensureDistFolder();
+    const cli = new CLIEngine({
+      baseConfig: {
+        extends: [require.resolve('@foreach/eslint-config-react-app')],
+      },
+    });
+
+    const formatter = cli.getFormatter(
+      require.resolve('react-dev-utils/eslintFormatter')
+    );
+
     if (opts.format.includes('cjs')) {
       await writeCjsEntryFile(opts.name);
     }
     const spinner = ora().start();
 
-    const configs = (buildConfigs as RollupWatchOptions[]).map(
-      inputOptions => ({
+    await watch(
+      (buildConfigs as RollupWatchOptions[]).map(inputOptions => ({
         watch: {
           silent: true,
           include: ['src/**'],
           exclude: ['node_modules/**'],
         } as WatcherOptions,
         ...inputOptions,
-      })
-    );
-
-    configs[configs.length - 1].plugins = [
-      eslint({
-        formatter: require.resolve('react-dev-utils/eslintFormatter'),
-        baseConfig: {
-          extends: [require.resolve('@foreach/eslint-config-react-app')],
-        },
-      }),
-      // @ts-ignore
-      ...configs[configs.length - 1].plugins,
-    ];
-
-    await watch(configs).on('event', async event => {
+      }))
+    ).on('event', async event => {
       if (event.code === 'START') {
         if (!opts.verbose) {
           clearConsole();
@@ -360,6 +359,8 @@ prog
       }
       if (event.code === 'END') {
         spinner.succeed(chalk.bold.green('Compiled successfully'));
+        const report = cli.executeOnFiles(opts['_']);
+        console.log(formatter(report.results));
         console.log(`
   ${chalk.dim('Watching for changes')}
 `);
