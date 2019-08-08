@@ -74,6 +74,23 @@ async function jsOrTs(filename: string) {
   return resolveApp(`${filename}${extension}`);
 }
 
+function getLinter() {
+  const cli = new CLIEngine({
+    extensions: ['.ts', '.tsx'],
+    baseConfig: {
+      extends: [require.resolve('@foreach/eslint-config-react-app')],
+    },
+  });
+
+  const formatter = cli.getFormatter();
+
+  return () => {
+    const report = cli.executeOnFiles([paths.appSrc]);
+    console.log(formatter(report.results));
+    return report;
+  };
+}
+
 async function getInputs(entries: string[], source?: string) {
   let inputs: any[] = [];
   let stub: any[] = [];
@@ -318,14 +335,8 @@ prog
     const opts = await normalizeOpts(dirtyOpts);
     const buildConfigs = createBuildConfigs(opts);
     await ensureDistFolder();
-    const cli = new CLIEngine({
-      extensions: ['.ts', '.tsx'],
-      baseConfig: {
-        extends: [require.resolve('@foreach/eslint-config-react-app')],
-      },
-    });
 
-    const formatter = cli.getFormatter();
+    const runEslint = getLinter();
 
     if (opts.format.includes('cjs')) {
       await writeCjsEntryFile(opts.name);
@@ -358,8 +369,7 @@ prog
       }
       if (event.code === 'END') {
         spinner.succeed(chalk.bold.green('Compiled successfully'));
-        const report = cli.executeOnFiles([paths.appSrc]);
-        console.log(formatter(report.results));
+        runEslint();
         console.log(`
   ${chalk.dim('Watching for changes')}
 `);
@@ -406,11 +416,18 @@ prog
     const opts = await normalizeOpts(dirtyOpts);
     const buildConfigs = createBuildConfigs(opts);
     await ensureDistFolder();
+    const runEslint = getLinter();
+
     if (opts.format.includes('cjs')) {
       const promise = writeCjsEntryFile(opts.name).catch(logError);
       logger(promise, 'Creating entry file');
     }
     try {
+      const report = runEslint();
+      if (report.errorCount) {
+        throw new Error('Project contains ESLint errors, failed to build.');
+      }
+
       const promise = asyncro
         .map(
           buildConfigs,
