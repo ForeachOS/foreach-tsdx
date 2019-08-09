@@ -87,6 +87,7 @@
     "tslib": "^1.10.0"
   },
   "devDependencies": {
+    "@testing-library/react": "^8.0.9",
     "@types/ansi-escapes": "^4.0.0",
     "@types/camelcase": "^5.2.0",
     "@types/eslint": "^4.16.6",
@@ -105,7 +106,8 @@
     "prettier": "^1.18.2",
     "pretty-quick": "^1.11.1",
     "ps-tree": "^1.2.0",
-    "react": "^16.8.6",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "shelljs": "^0.8.3",
     "tslint": "^5.18.0",
     "tslint-config-palmerhq": "^1.1.0",
