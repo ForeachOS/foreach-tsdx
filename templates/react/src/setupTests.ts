@@ -1,4 +1,3 @@
-import * as React from 'react';
 // add some helpful assertions
 import 'jest-dom/extend-expect';
 
