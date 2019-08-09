@@ -229,6 +229,12 @@ prog
             template === 'react'
               ? 'foreach-tsdx test --env=jsdom'
               : 'foreach-tsdx test',
+          ...(template === 'react'
+            ? {
+                storybook: 'start-storybook -p 6006',
+                'build-storybook': 'build-storybook',
+              }
+            : {}),
         },
         peerDependencies: template === 'react' ? { react: '>=16' } : {},
         husky: {
@@ -272,12 +278,24 @@ prog
     if (template === 'react') {
       deps = [
         ...deps,
+        '@babel/core',
+        '@storybook/addon-actions',
+        '@storybook/addon-info',
+        '@storybook/addon-links',
+        '@storybook/addons',
+        '@storybook/react',
+        '@testing-library/react',
         '@types/react',
         '@types/react-dom',
+        '@types/storybook__addon-actions',
+        '@types/storybook__addon-info',
+        '@types/storybook__addon-links',
+        '@types/storybook__react',
         'react',
         'react-dom',
         'jest-dom',
-        '@testing-library/react',
+        'awesome-typescript-loader',
+        'babel-loader',
       ].sort();
     }
 
