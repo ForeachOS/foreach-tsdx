@@ -10,15 +10,16 @@ Despite all the recent hype, setting up a new TypeScript (x React) library can b
   - [`npm start` or `yarn start`](#npm-start-or-yarn-start)
   - [`npm run build` or `yarn build`](#npm-run-build-or-yarn-build)
   - [`npm test` or `yarn test`](#npm-test-or-yarn-test)
+  - [`npm run lint` or `yarn lint`](#npm-run-lint-or-yarn-lint)
 - [Optimizations](#optimizations)
   - [Development-only Expressions + Treeshaking](#development-only-expressions--treeshaking)
     - [Rollup Treeshaking](#rollup-treeshaking)
     - [Advanced `babel-plugin-dev-expressions`](#advanced-babel-plugin-dev-expressions)
-      - [`__DEV__`](#__dev__)
+      - [`__DEV__`](#dev)
       - [`invariant`](#invariant)
       - [`warning`](#warning)
   - [Using lodash](#using-lodash)
-- [Hosting extracted errors](#hosting-extracted-errors)
+  - [Error extraction](#error-extraction)
 - [Inspiration](#inspiration)
   - [Comparison to Microbundle](#comparison-to-microbundle)
 - [API Reference](#api-reference)
@@ -74,6 +75,11 @@ The package is optimized and bundled with Rollup into multiple formats (CommonJS
 
 Runs the test watcher (Jest) in an interactive mode.
 By default, runs tests related to files changed since the last commit.
+
+### `npm run lint` or `yarn lint`
+
+Runs Eslint with Prettier on .ts and .tsx files.
+If you want to customize eslint you can add an `eslint` block to your package.json, or you can run `yarn lint --write-file` and edit the generated `.eslintrc.js` file.
 
 ## Optimizations
 

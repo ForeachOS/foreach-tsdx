@@ -24,14 +24,12 @@ import { paths } from './constants';
 import * as Messages from './messages';
 import { createRollupConfig } from './createRollupConfig';
 import { createJestConfig } from './createJestConfig';
+import { createEslintInstance } from './createEslintInstance';
 import { resolveApp, safePackageName, clearConsole } from './utils';
-// import * as Output from './output';
 import { concatAllArray } from 'jpjs';
 import getInstallCmd from './getInstallCmd';
 import getInstallArgs from './getInstallArgs';
 import { Input, Select } from 'enquirer';
-
-import { CLIEngine } from 'eslint';
 
 const pkg = require('../package.json');
 const createLogger = require('progress-estimator');
@@ -47,6 +45,7 @@ let appPackageJson: {
   name: string;
   source?: string;
   jest?: any;
+  eslint?: any;
 };
 try {
   appPackageJson = fs.readJSONSync(resolveApp('package.json'));
@@ -72,23 +71,6 @@ async function jsOrTs(filename: string) {
     : '.js';
 
   return resolveApp(`${filename}${extension}`);
-}
-
-function getLinter() {
-  const cli = new CLIEngine({
-    extensions: ['.ts', '.tsx'],
-    baseConfig: {
-      extends: [require.resolve('@foreachbe/eslint-config-react-app')],
-    },
-  });
-
-  const formatter = cli.getFormatter();
-
-  return () => {
-    const report = cli.executeOnFiles([paths.appSrc]);
-    console.log(formatter(report.results));
-    return report;
-  };
 }
 
 async function getInputs(entries: string[], source?: string) {
@@ -354,7 +336,7 @@ prog
     const buildConfigs = createBuildConfigs(opts);
     await ensureDistFolder();
 
-    const runEslint = getLinter();
+    const runEslint = createEslintInstance();
 
     if (opts.format.includes('cjs')) {
       await writeCjsEntryFile(opts.name);
@@ -434,7 +416,7 @@ prog
     const opts = await normalizeOpts(dirtyOpts);
     const buildConfigs = createBuildConfigs(opts);
     await ensureDistFolder();
-    const runEslint = getLinter();
+    const runEslint = createEslintInstance();
 
     if (opts.format.includes('cjs')) {
       const promise = writeCjsEntryFile(opts.name).catch(logError);
@@ -513,7 +495,7 @@ prog
   .describe(
     'Run jest test runner in watch mode. Passes through all flags directly to Jest'
   )
-  .action(async (opts: any) => {
+  .action(async () => {
     // Do this as the first thing so that any code reading it knows the right env.
     process.env.BABEL_ENV = 'test';
     process.env.NODE_ENV = 'test';
@@ -537,7 +519,7 @@ prog
       })
     );
 
-    const [_skipTheWordTest, ...argsToPassToJestCli] = argv;
+    const [, ...argsToPassToJestCli] = argv;
     jest.run(argsToPassToJestCli);
   });
 
