@@ -25,7 +25,7 @@ import * as Messages from './messages';
 import { createRollupConfig } from './createRollupConfig';
 import { createJestConfig } from './createJestConfig';
 import { resolveApp, safePackageName, clearConsole } from './utils';
-import * as Output from './output';
+// import * as Output from './output';
 import { concatAllArray } from 'jpjs';
 import getInstallCmd from './getInstallCmd';
 import getInstallArgs from './getInstallArgs';
@@ -78,7 +78,7 @@ function getLinter() {
   const cli = new CLIEngine({
     extensions: ['.ts', '.tsx'],
     baseConfig: {
-      extends: [require.resolve('@foreach/eslint-config-react-app')],
+      extends: [require.resolve('@foreachbe/eslint-config-react-app')],
     },
   });
 
@@ -243,7 +243,7 @@ prog
           },
         },
         eslintConfig: {
-          extends: '@foreach/eslint-config-react-app',
+          extends: '@foreachbe/eslint-config-react-app',
         },
         'lint-staged': {
           '*.{ts,tsx,js,jsx}': ['prettier --write', 'eslint --fix', 'git add'],
