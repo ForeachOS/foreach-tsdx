@@ -1,6 +1,6 @@
 {
   "name": "foreach-tsdx",
-  "version": "1.0.0-1",
+  "version": "1.0.0-2",
   "author": "Jared Palmer <jared@palmer.net>",
   "description": "Zero-config TypeScript package development",
   "license": "MIT",
@@ -121,8 +121,7 @@
     "typescript": "3"
   },
   "husky": {
-    "hooks": {
-    }
+    "hooks": {}
   },
   "eslintConfig": {
     "extends": "@foreachbe/eslint-config-react-app"
