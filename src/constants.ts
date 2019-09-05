@@ -6,5 +6,4 @@ export const paths = {
   appRoot: resolveApp('.'),
   appSrc: resolveApp('src'),
   appErrorsJson: resolveApp('./codes.json'),
-  appDist: resolveApp('dist'),
 };

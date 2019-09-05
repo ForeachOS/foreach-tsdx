@@ -107,13 +107,13 @@ function createBuildConfigs(
   ).filter(Boolean);
 }
 
-async function moveTypes() {
+async function moveTypes(outputPath: string) {
   try {
     // Move the typescript types to the base of the ./dist folder
-    await fs.copy(paths.appDist + '/src', paths.appDist, {
+    await fs.copy(outputPath + '/src', outputPath, {
       overwrite: true,
     });
-    await fs.remove(paths.appDist + '/src');
+    await fs.remove(outputPath + '/src');
   } catch (e) {}
 }
 
@@ -299,7 +299,7 @@ prog
   .describe('Rebuilds on any change')
   .option('--entry, -i', 'Entry module(s)')
   .example('watch --entry src/foo.tsx')
-  .option('--output', 'relative path to output directory (default dist)')
+  .option('--output', 'relative path to output directory', 'dist')
   .example('watch --output build')
   .option('--externals, -e', 'External modules')
   .example('watch --externals jquery,react')
@@ -336,12 +336,12 @@ prog
   .action(async (dirtyOpts: any) => {
     const opts = await normalizeOpts(dirtyOpts);
     const buildConfigs = createBuildConfigs(opts);
-    await ensureDistFolder();
+    await ensureDistFolder(opts.output);
 
     const runEslint = createEslintInstance();
 
     if (opts.format.includes('cjs')) {
-      await writeCjsEntryFile(opts.name);
+      await writeCjsEntryFile(opts.name, opts.output);
     }
     const spinner = ora().start();
 
@@ -376,7 +376,7 @@ prog
   ${chalk.dim('Watching for changes')}
 `);
         try {
-          await moveTypes();
+          await moveTypes(opts.output);
         } catch (_error) {}
       }
     });
@@ -387,7 +387,7 @@ prog
   .describe('Build your project once and exit')
   .option('--entry, -i', 'Entry module(s)')
   .example('build --entry src/foo.tsx')
-  .option('--output', 'relative path to output directory (default dist)')
+  .option('--output', 'relative path to output directory', 'dist')
   .example('build --output build')
   .option('--externals, -e', 'External modules')
   .example('build --externals jquery,react')
@@ -419,11 +419,11 @@ prog
   .action(async (dirtyOpts: any) => {
     const opts = await normalizeOpts(dirtyOpts);
     const buildConfigs = createBuildConfigs(opts);
-    await ensureDistFolder();
+    await ensureDistFolder(opts.output);
     const runEslint = createEslintInstance();
 
     if (opts.format.includes('cjs')) {
-      const promise = writeCjsEntryFile(opts.name).catch(logError);
+      const promise = writeCjsEntryFile(opts.name, opts.output).catch(logError);
       logger(promise, 'Creating entry file');
     }
     try {
@@ -438,7 +438,7 @@ prog
           async (inputOptions: RollupOptions & { output: OutputOptions }) => {
             let bundle = await rollup(inputOptions);
             await bundle.write(inputOptions.output);
-            await moveTypes();
+            await moveTypes(opts.output);
           }
         )
         .catch((e: any) => {
@@ -459,6 +459,7 @@ type Dict = {
 async function normalizeOpts(opts: any) {
   return {
     ...opts,
+    output: resolveApp(opts.output),
     name: opts.name || appPackageJson.name,
     input: await getInputs(opts.entry, appPackageJson.source),
     externals: opts.externals ? opts.externals.split(',') : [],
@@ -476,11 +477,11 @@ async function normalizeOpts(opts: any) {
   };
 }
 
-function ensureDistFolder() {
-  return util.promisify(mkdirp)(resolveApp('dist'));
+function ensureDistFolder(outputPath: string) {
+  return util.promisify(mkdirp)(outputPath);
 }
 
-function writeCjsEntryFile(name: string) {
+function writeCjsEntryFile(name: string, outputPath: string) {
   const baseLine = `module.exports = require('./${safePackageName(name)}`;
   const contents = `
 'use strict'
@@ -491,7 +492,7 @@ if (process.env.NODE_ENV === 'production') {
   ${baseLine}.cjs.development.js')
 }
 `;
-  return fs.writeFile(resolveApp(`./dist/index.js`), contents);
+  return fs.writeFile(`${outputPath}/index.js`, contents);
 }
 
 prog
