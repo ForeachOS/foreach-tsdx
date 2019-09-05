@@ -1,7 +1,7 @@
 {
   "name": "foreach-tsdx",
   "version": "1.0.0-2",
-  "author": "Jared Palmer <jared@palmer.net>",
+  "author": "Simon Van den Broeck",
   "description": "Zero-config TypeScript package development",
   "license": "MIT",
   "repository": {
@@ -9,8 +9,7 @@
     "url": "git+https://github.com/jarrku/foreach-tsdx.git"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "https://repository.foreach.be/nexus/repository/npm-hosted/"
+    "access": "public"
   },
   "keywords": [
     "react",
