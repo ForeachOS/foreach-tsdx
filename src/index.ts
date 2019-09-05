@@ -299,6 +299,8 @@ prog
   .describe('Rebuilds on any change')
   .option('--entry, -i', 'Entry module(s)')
   .example('watch --entry src/foo.tsx')
+  .option('--output', 'relative path to output directory (default dist)')
+  .example('watch --output build')
   .option('--externals, -e', 'External modules')
   .example('watch --externals jquery,react')
   .option(
@@ -385,6 +387,8 @@ prog
   .describe('Build your project once and exit')
   .option('--entry, -i', 'Entry module(s)')
   .example('build --entry src/foo.tsx')
+  .option('--output', 'relative path to output directory (default dist)')
+  .example('build --output build')
   .option('--externals, -e', 'External modules')
   .example('build --externals jquery,react')
   .option(

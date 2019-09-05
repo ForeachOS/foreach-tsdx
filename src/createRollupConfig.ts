@@ -1,5 +1,5 @@
 import { DEFAULT_EXTENSIONS } from '@babel/core';
-import { safeVariableName, safePackageName, external } from './utils';
+import { safeVariableName, safePackageName, external, resolveApp } from './utils';
 import { paths } from './constants';
 import { terser } from 'rollup-plugin-terser';
 import babel from 'rollup-plugin-babel';
@@ -22,6 +22,7 @@ const errorCodeOpts = {
 
 interface TsdxOptions {
   entry: string[];
+  output?: string;
   externals: string[];
   globals: {
     [x: string]: string;
@@ -96,8 +97,10 @@ export function createRollupConfig(
   const shouldMinify =
     opts.minify !== undefined ? opts.minify : opts.env === 'production';
 
+  const output = opts.output ? resolveApp(opts.output) : paths.appDist;
+
   const outputName = [
-    `${paths.appDist}/${getFileName(opts)}`,
+    `${output}/${getFileName(opts)}`,
     format,
     opts.env,
     shouldMinify ? 'min' : '',

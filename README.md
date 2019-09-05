@@ -300,23 +300,29 @@ Usage
   $ foreach-tsdx watch [options]
 
 Options
-  -i, --entry    Entry module(s)
-  --target       Specify your target environment  (default web)
-  --name         Specify name exposed in UMD builds
-  --format       Specify module format(s)  (default cjs,esm)
-  --tsconfig            Specify your custom tsconfig path (default <root-folder>/tsconfig.json)
-  --verbose             Keep outdated console output in watch mode instead of clearing the screen
-  --include-deps Include all project dependencies in the bundle (default false)
-  --inline-css   Inlines the css in the JS bundle (default false)
-  -h, --help     Displays this message
+  -i, --entry       Entry module(s)
+  --output          Specify the relative path to the output directory (default `dist`)
+  --target          Specify your target environment  (default `web`)
+  --name            Specify name exposed in UMD builds
+  --format          Specify module format(s)  (default `cjs,esm`)
+  --verbose         Keep outdated console output in watch mode instead of clearing the screen
+  --tsconfig        Specify your custom tsconfig path (default `<root-folder>/tsconfig.json`)
+  --include-deps    Include all project dependencies in the bundle (default `false`)
+  -e, --externals   Specify which libraries to mark as externals
+  -g, --globals     Specify wich globals should be aliased to which package (default `react=React,jquery=jQuery`)
+  --inline-css      Inlines the css in the JS bundle (default `false`)
+  -h, --help        Displays this message
 
 Examples
   $ foreach-tsdx watch --entry src/foo.tsx
+  $ foreach-tsdx watch --output build
   $ foreach-tsdx watch --target node
   $ foreach-tsdx watch --name Foo
   $ foreach-tsdx watch --format cjs,esm,umd
   $ foreach-tsdx watch --tsconfig ./tsconfig.foo.json
   $ foreach-tsdx watch --include-deps
+  $ foreach-tsdx watch --externals jquery,react
+  $ foreach-tsdx watch --globals jquery=jQuery,react=React
   $ foreach-tsdx watch --inline-css
 ```
 
@@ -330,24 +336,30 @@ Usage
   $ foreach-tsdx build [options]
 
 Options
-  -i, --entry    Entry module(s)
-  --target       Specify your target environment  (default web)
-  --name         Specify name exposed in UMD builds
-  --format       Specify module format(s)  (default cjs,esm)
-  --extractErrors       Specify url for extracting error codes
-  --tsconfig            Specify your custom tsconfig path (default <root-folder>/tsconfig.json)
-  --include-deps Include all project dependencies in the bundle (default false)
-  --inline-css   Inlines the css in the JS bundle (default false)
-  -h, --help     Displays this message
+  -i, --entry       Entry module(s)
+  --output          Specify the relative path to the output directory (default `dist`)
+  --target          Specify your target environment  (default `web`)
+  --name            Specify name exposed in UMD builds
+  --format          Specify module format(s)  (default `cjs,esm`)
+  --extractErrors   Specify url for extracting error codes
+  --tsconfig        Specify your custom tsconfig path (default `<root-folder>/tsconfig.json`)
+  --include-deps    Include all project dependencies in the bundle (default `false`)
+  -e, --externals   Specify which libraries to mark as externals
+  -g, --globals     Specify wich globals should be aliased to which package (default `react=React,jquery=jQuery`)
+  --inline-css      Inlines the css in the JS bundle (default `false`)
+  -h, --help        Displays this message
 
 Examples
   $ foreach-tsdx build --entry src/foo.tsx
+  $ foreach-tsdx build --output build
   $ foreach-tsdx build --target node
   $ foreach-tsdx build --name Foo
   $ foreach-tsdx build --format cjs,esm,umd
   $ foreach-tsdx build --extractErrors=https://reactjs.org/docs/error-decoder.html?invariant=
   $ foreach-tsdx build --tsconfig ./tsconfig.foo.json
   $ foreach-tsdx build --include-deps
+  $ foreach-tsdx build --externals jquery,react
+  $ foreach-tsdx build --globals jquery=jQuery,react=React
   $ foreach-tsdx build --inline-css
 ```
 
