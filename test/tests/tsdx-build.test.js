@@ -22,10 +22,10 @@ describe('foreach-tsdx build', () => {
 
     expect(shell.test('-f', 'dist/index.js')).toBeTruthy();
     expect(
-      shell.test('-f', 'dist/build-default.cjs.development.js')
+      shell.test('-f', 'dist/build-default.cjs.js')
     ).toBeTruthy();
     expect(
-      shell.test('-f', 'dist/build-default.cjs.production.min.js')
+      shell.test('-f', 'dist/build-default.cjs.min.js')
     ).toBeTruthy();
     expect(shell.test('-f', 'dist/build-default.esm.js')).toBeTruthy();
 
