@@ -100,7 +100,6 @@ export function createRollupConfig(
   const outputName = [
     `${opts.output}/${getFileName(opts)}`,
     format,
-    opts.env,
     shouldMinify ? 'min' : '',
     'js',
   ]
