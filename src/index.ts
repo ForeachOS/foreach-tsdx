@@ -487,9 +487,9 @@ function writeCjsEntryFile(name: string, outputPath: string) {
 'use strict'
 
 if (process.env.NODE_ENV === 'production') {
-  ${baseLine}.cjs.production.min.js')
+  ${baseLine}.cjs.min.js')
 } else {
-  ${baseLine}.cjs.development.js')
+  ${baseLine}.cjs.js')
 }
 `;
   return fs.writeFile(`${outputPath}/index.js`, contents);
