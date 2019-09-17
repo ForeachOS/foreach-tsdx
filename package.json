@@ -39,6 +39,7 @@
     "@babel/plugin-proposal-class-properties": "^7.5.5",
     "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
+    "@emotion/babel-preset-css-prop": "10.0.17",
     "@foreachbe/eslint-config-react-app": "^2.2.0",
     "@typescript-eslint/eslint-plugin": "^2.2.0",
     "@typescript-eslint/parser": "^2.2.0",
@@ -117,6 +118,7 @@
     "typescript": "^3.6.3"
   },
   "peerDependencies": {
+    "@emotion/core": "10.x",
     "typescript": "3"
   },
   "husky": {

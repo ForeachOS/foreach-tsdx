@@ -14,6 +14,14 @@ import postcssNormalize from 'postcss-normalize';
 
 import { extractErrors } from './errors/extractErrors';
 
+let hasEmotionDependency = true;
+
+try {
+  require.resolve('@emotion/core');
+} catch (err) {
+  hasEmotionDependency = false;
+}
+
 const replacements = [{ original: 'lodash', replacement: 'lodash-es' }];
 
 const errorCodeOpts = {
@@ -52,7 +60,10 @@ const babelOptions = (format: 'cjs' | 'esm' | 'umd', opts: TsdxOptions) => ({
         exclude: ['transform-async-to-generator'],
       },
     ],
-  ],
+    hasEmotionDependency && [
+      require.resolve('@emotion/babel-preset-css-prop'),
+    ]
+  ].filter(Boolean),
   plugins: [
     require.resolve('babel-plugin-annotate-pure-calls'),
     require.resolve('babel-plugin-dev-expression'),
