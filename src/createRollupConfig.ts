@@ -51,6 +51,9 @@ const babelOptions = (format: 'cjs' | 'esm' | 'umd', opts: TsdxOptions) => ({
   extensions: [...DEFAULT_EXTENSIONS, 'ts', 'tsx'],
   passPerPreset: true, // @see https://babeljs.io/docs/en/options#passperpreset
   presets: [
+    hasEmotionDependency && [
+      require.resolve('@emotion/babel-preset-css-prop'),
+    ],
     [
       require.resolve('@babel/preset-env'),
       {
@@ -59,9 +62,6 @@ const babelOptions = (format: 'cjs' | 'esm' | 'umd', opts: TsdxOptions) => ({
         targets: opts.target === 'node' ? { node: '8' } : undefined,
         exclude: ['transform-async-to-generator'],
       },
-    ],
-    hasEmotionDependency && [
-      require.resolve('@emotion/babel-preset-css-prop'),
     ]
   ].filter(Boolean),
   plugins: [
