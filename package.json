@@ -1,6 +1,6 @@
 {
   "name": "foreach-tsdx",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "author": "Simon Van den Broeck",
   "description": "Zero-config TypeScript package development",
   "license": "MIT",
