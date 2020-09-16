@@ -1172,10 +1172,10 @@
     minimatch "^3.0.4"
     strip-json-comments "^3.1.1"
 
-"@foreachbe/eslint-config-react-app@6.0.1-beta.0":
-  version "6.0.1-beta.0"
-  resolved "https://registry.yarnpkg.com/@foreachbe/eslint-config-react-app/-/eslint-config-react-app-6.0.1-beta.0.tgz#32cda83b3c04df82bb51c415dbec357a4edb2f94"
-  integrity sha512-7xZShJpUhL2uuvXpCBo70vN5yYCeqf4DzoQb9o6/KiOyEsLX3/udXsBhKPy3xirTrOu7BRYrpcSJMMhddMHDgg==
+"@foreachbe/eslint-config-react-app@7.0.0":
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/@foreachbe/eslint-config-react-app/-/eslint-config-react-app-7.0.0.tgz#c636f4f2928a3ae87760bbac44c522f5d50f4764"
+  integrity sha512-R/s/Zn3OrY5k2FybOhgHap5KtWRi8pygmGb4DzIJSrE1XZhooaJV5YzBjytMxmJVK1HnVuBMPUeVuZBjOMk4yg==
   dependencies:
     confusing-browser-globals "^1.0.9"
 
